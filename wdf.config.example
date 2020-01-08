@@ -1,0 +1,32 @@
+## Webdata Datakit Framework (WDF) Example Config
+
+## 全局配置
+[global]
+
+  ## log 输出文件
+  log_path = "wdf.log"
+
+  ## log 是否开启 debug 打印，默认不开启
+  log_debug = false
+
+  ## 监听端口
+  listen = ":8080"
+
+  ## nsq lookupd 地址，需要添加协议头"http://"
+  nsq_lookupd_addr = "http://127.0.0.1:4161"
+
+  ## 定时器存取的 topic，为空值时将不启动定时器
+  timer_topic = "timer"
+
+  ## 定时器周期，单位是秒，值小于等于 0 时不启动定时器
+  timer_cycle = 0
+
+## 回调组，可以有多个
+[[callback]]
+
+  ## http 路由：http://ip:port/TEST
+  ## nsq 消费 topic：TEST
+  route = "TEST"
+
+  ## 验证脚本，除非需要验证，否则为空值
+  # verify_bash = "/tmp/test.sh"
