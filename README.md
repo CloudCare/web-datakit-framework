@@ -1,25 +1,20 @@
-## Webdata Datakit Framework (WDF) Usage Doc
+## Web Datakit Framework (WDF) Usage Doc
 
 ---
 
 ### 关于
 
-- 此项目作为 cloude-care dataway 关联构建，作为中间层负责数据暂存。
+- 此项目作为 dataflux dataway 关联构建，作为中间层负责数据暂存。
 
 - 数据存储中间件使用 [NSQ ](https://nsq.io/)，用户需要配置 NSQ lookupd host 和`topic`等参数。
 
 ### 版本
 
-> Version: v2.0.2
+> Version: v1.0.1
 
-### 运行环境
+### 安装和使用
 
-> 推荐使用 go version 1.12.13 及以上版本
-
-### 安装和编译
-
-> 执行命令 `go get github.com/CloudCare/web-datakit-framework`
-> `go build main.go`
+提供4种安装方式，详情查看**install.md**
 
 ### 配置文件
 
@@ -33,7 +28,7 @@
 [global]
 
     ## 日志路径
-    log_path = "log"
+    log_path = "/usr/local/cloudcare/forethought/wdf/log"
 
     ## 监听端口
     listen = ":8080"

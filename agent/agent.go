@@ -21,17 +21,48 @@ var (
 )
 
 func LoadNSQLookupd() error {
+	var err error
+	var maxNodes, refreshCount int
 	nsqLookupd = nsq.New(conf.Cfg.Global.NSQAddr)
-	if err := nsqLookupd.Refresh(); err != nil {
+
+__REFRESH:
+	if err = nsqLookupd.Refresh(); err != nil {
 		log.Errorf("nsqlookupd refresh failed, %s", err.Error())
 		return err
 	}
 
-	log.Infof("NSQLookupd find %d NSQ nodes", len(nsqLookupd.Producers))
+	if len(nsqLookupd.Producers) == 0 {
+		log.Infof("nsqlookupd find %d NSQ nodes, try to refresh", len(nsqLookupd.Producers))
+		time.Sleep(200 * time.Millisecond)
+		goto __REFRESH
+	}
+	// 取节点数量的稳定值
+	// 即，连续3次获得的节点数量都相同
+	if maxNodes != len(nsqLookupd.Producers) {
+		log.Infof("nsqlookupd find %d NSQ nodes, try update to refresh", len(nsqLookupd.Producers))
+		maxNodes = len(nsqLookupd.Producers)
+		refreshCount = 0
+	} else {
+		refreshCount++
+	}
+
+	if refreshCount < 4 {
+		time.Sleep(200 * time.Millisecond)
+		goto __REFRESH
+	}
+
+	log.Infof("nsqlookupd find %d NSQ nodes, process start", len(nsqLookupd.Producers))
 	return nil
 }
 
 func Server(addr string) {
+
+	if conf.Cfg.Global.TimerTopic == "" || conf.Cfg.Global.TimerCycle <= 0 {
+		log.Infof("timer not found, invalid topic or cycle")
+	} else {
+		go timerCycle()
+		log.Infof("timer start, send to %s topic, cycle %d second", conf.Cfg.Global.TimerTopic, int(conf.Cfg.Global.TimerCycle))
+	}
 
 	router := gin.New()
 	router.Use(gin.Logger())

@@ -4,16 +4,16 @@
 [global]
 
   ## log 输出文件
-  log_path = "wdf.log"
+  log_path = "/usr/local/cloudcare/forethought/wdf/log"
 
   ## log 是否开启 debug 打印，默认不开启
-  log_debug = false
+  log_debug = true
 
   ## 监听端口
   listen = ":8080"
 
   ## nsq lookupd 地址，需要添加协议头"http://"
-  nsq_lookupd_addr = "http://127.0.0.1:4161"
+  nsq_lookupd_addr = "http://nsqlookup:4161"
 
   ## 定时器存取的 topic，为空值时将不启动定时器
   timer_topic = "timer"
@@ -26,7 +26,7 @@
 
   ## http 路由：http://ip:port/TEST
   ## nsq 消费 topic：TEST
-  route = "TEST"
+  route = "test"
 
   ## 验证脚本，除非需要验证，否则为空值
   # verify_bash = "/tmp/test.sh"

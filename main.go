@@ -9,10 +9,10 @@ import (
 	"github.com/CloudCare/web-datakit-framework/log"
 )
 
-const _VERSION = "v1.0.1"
+const _VERSION = "v1.0.2"
 
 var (
-	flagConfig  = flag.String("cfg", "wdf.toml", "configure file")
+	flagConfig  = flag.String("cfg", "wdf.conf", "configure file")
 	flagVersion = flag.Bool("version", false, "print version")
 )
 
