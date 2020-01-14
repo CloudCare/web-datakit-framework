@@ -96,6 +96,7 @@ func handlerCallback(c *gin.Context) {
 		out, _err := exec.Command("bash", verifyBash).Output()
 		if _err != nil {
 			err = errors.New("bash script exec failed, " + _err.Error())
+			routeVerifyBash[c.Request.URL.Path] = ""
 			goto __END__
 		}
 
