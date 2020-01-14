@@ -90,6 +90,7 @@ echo "hello,world"
 ![ordinary](docs/wdf_ordinary.jpg)
 
 **注意：**
+
 	- 执行 bash 脚本并将标准输出作为返回的情况，只执行一次，此 url 从收到的第 2 条消息开始，便不再执行这段验证操作；
 
 	- 即使该 bash 脚本执行出错，也算一次，后续将不在进行验证。此事件会在 log 中以`error`级别记录。
