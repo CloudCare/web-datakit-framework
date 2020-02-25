@@ -21,13 +21,15 @@
 
 1. 使用 `git clone https://github.com/CloudCare/web-datakit-framework.git` 下载 wdf 项目。
 
-2. 在终端中运行 `bash docker_install.sh $NSQLOOKUPD_IP`，其中，第二个参数为 NSQ lookupd 的消费地址，可以是内网 IP 或外网 IP，不可以是 127.0.0.1
+2. 在终端中运行 `bash docker_install.sh $NSQLOOKUPD_IP`，其中，第二个参数为 NSQ lookupd 的消费地址，*如果仅在内网使用可以填内网 IP，否则需要使用外网 IP*，不可以是 127.0.0.1
 
 3. 启动成功后，打印如下图：
 
     ![docker](docs/docker-wdf.jpg)
 
 4. 使用 `docker ps -a` 查看容器的运行状态，或查看 wdf log
+
+5. **服务正常启用，需要开启相应的端口，大部分云服务都默认关闭，需要手动配置。可以使用`docker ps`查看服务所需的端口，如 4151 等**
 
 ### linux
 

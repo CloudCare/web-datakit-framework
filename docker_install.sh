@@ -47,11 +47,11 @@ function command_check() {
 
 function creata_files() {
 
-  if [ ! -d ${NSQ_DATA_DIR} ]; then
-    if ( sudo mkdir -p ${NSQ_DATA_DIR} ) ; then
-      info "Create ${NSQ_DATA_DIR} success"
+  if [ ! -d ${NSQD_DATA_DIR} ]; then
+    if ( sudo mkdir -p ${NSQD_DATA_DIR} ) ; then
+      info "Create ${NSQD_DATA_DIR} success"
     else 
-      err "Create ${NSQ_DATA_DIR} failed"
+      err "Create ${NSQD_DATA_DIR} failed"
       exit 1
     fi
   fi
