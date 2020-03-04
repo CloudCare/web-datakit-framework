@@ -9,7 +9,7 @@ import (
 	"github.com/CloudCare/web-datakit-framework/log"
 )
 
-const _VERSION = "v1.0.2"
+const _VERSION = "v1.0.4"
 
 var (
 	flagConfig  = flag.String("cfg", "wdf.conf", "configure file")
@@ -40,5 +40,5 @@ func main() {
 		return
 	}
 
-	agent.Server("0.0.0.0" + conf.Cfg.Global.Listen)
+	agent.Server(conf.Cfg.Global.Listen)
 }

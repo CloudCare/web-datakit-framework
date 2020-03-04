@@ -1,6 +1,7 @@
 package log
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -11,38 +12,38 @@ var (
 	isDebug bool
 )
 
-func InitLog(path string, debugModel bool) error {
+func InitLog(path string, debug bool) error {
 
 	l, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return err
 	}
 
-	isDebug = debugModel
+	isDebug = debug
 
 	_log = log.New(l, "", log.Lshortfile|log.LstdFlags)
 	return nil
 }
 
 func Infof(format string, v ...interface{}) {
-	_log.Printf("[info ] "+format, v...)
+	_log.Output(2, fmt.Sprintf("[info ] "+format, v...))
 }
 
 func Debugf(format string, v ...interface{}) {
 	if isDebug {
-		_log.Printf("[debug] "+format, v...)
+		_log.Output(2, fmt.Sprintf("[debug] "+format, v...))
 	}
 }
 
 func Warnf(format string, v ...interface{}) {
-	_log.Printf("[warn ] "+format, v...)
+	_log.Output(2, fmt.Sprintf("[warn] "+format, v...))
 }
 
 func Errorf(format string, v ...interface{}) {
-	_log.Printf("[error] "+format, v...)
+	_log.Output(2, fmt.Sprintf("[error] "+format, v...))
 }
 
 func Fatalf(format string, v ...interface{}) {
-	_log.Printf("[fatal] "+format, v...)
+	_log.Output(2, fmt.Sprintf("[fatal] "+format, v...))
 	os.Exit(1)
 }
