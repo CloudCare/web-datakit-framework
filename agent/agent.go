@@ -75,6 +75,7 @@ func Server(addr string) {
 		router.POST("/"+v.Route, func(c *gin.Context) { handlerCallback(c) })
 	}
 
+	router.POST("/pwdf", func(c *gin.Context) { handlerTopic(c) })
 	srv := &http.Server{
 		Addr:    addr,
 		Handler: router,
