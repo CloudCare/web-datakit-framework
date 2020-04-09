@@ -29,10 +29,12 @@ const (
 type AuthInfo struct {
 	ch    chan []byte
 	stage AuthStage
+	token int
 }
 
 var (
 	superTopicAuth = make(map[string]AuthInfo)
+	token  int = 1
 )
 
 type JsonTrans struct {
@@ -45,6 +47,21 @@ func pub_nsqd(superTopic string, data []byte) error {
 	return err
 }
 
+func getToken() int {
+	token += 1
+	return token
+}
+func topicInitTimeOut(key string, token int){
+	select {
+	case <-time.NewTicker(time.Duration(4) * time.Second).C:
+		authInfo, ok := superTopicAuth[key]
+		if ok &&  authInfo.token == token && authInfo.stage != AUTH_SUCC {
+			authInfo.stage = AUTH_NONE
+			superTopicAuth[key] = authInfo
+			log.Infof("topic %s init timeout", key)
+		}
+	}
+}
 func handlerTopic(c *gin.Context) {
 	topic := c.Query("topic")
 	superTopic := c.Query("supertopic")
@@ -75,6 +92,7 @@ func handleWebdkitAuth(c *gin.Context, key, topic, status string){
 		return
 	}
 
+	tk := getToken()
 	switch status {
 	case "0":
 		if ok {
@@ -84,24 +102,16 @@ func handleWebdkitAuth(c *gin.Context, key, topic, status string){
 				c.String(http.StatusBadRequest, "topic %s has inited", topic)
 			} else {
 				authInfo.stage = AUTH_INIT
+				authInfo.token = tk
 				superTopicAuth[key] = authInfo
 				c.String(http.StatusOK, "")
+				go topicInitTimeOut(key, tk)
 			}
 		} else {
-			auth := AuthInfo{ make(chan []byte, 1), AUTH_INIT}
+			auth := AuthInfo{ make(chan []byte, 1), AUTH_INIT, tk}
 			superTopicAuth[key] = auth
 			c.String(http.StatusOK, "")
-			go func(key string){
-				select {
-				case <-time.NewTicker(time.Duration(4) * time.Second).C:
-					authInfo, ok := superTopicAuth[key]
-					if ok &&  authInfo.stage != AUTH_SUCC {
-						authInfo.stage = AUTH_NONE
-						superTopicAuth[key] = authInfo
-						log.Infof("topic %s delete", key)
-					}
-				}
-			}(key)
+			go topicInitTimeOut(key, tk)
 		}
 	case "-1":
 		if ok {
